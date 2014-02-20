@@ -1,0 +1,15 @@
+{
+	"manifest_version": 2,
+
+	"name": "g2i",
+	"description": "Redirects google.com queries to ixquick",
+	"version": "0.1",
+
+	"background": {"scripts":["uri.js", "background.js"]},
+
+	"permissions": ["webRequest", "tabs", "webRequestBlocking", "<all_urls>"],
+	"browser_action": {
+		"default_icon": "icons/icon.png",
+		"default_title": "Toggle google2ixquick"
+	}
+}
