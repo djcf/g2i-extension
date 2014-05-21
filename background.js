@@ -1,21 +1,22 @@
 enabled = true;
-
 /** GOOGLE **/
 chrome.webRequest.onBeforeRequest.addListener(function(details) {
 		if (enabled) {
-			query = URI(details.url).search(true);
-			search_terms = query.q;
-			url = "https://ixquick.com/do/search?query=" + search_terms + "&cat=web";
-			chrome.browserAction.setBadgeText({text: "OK"});
-			return {
-				redirectUrl: url
-			};
+			uri = URI(details.url);
+			if(uri.domain().substr(0,6)=="google") {
+				query = uri.search(true);
+				search_terms = query.q;
+				ixquick_url = "https://ixquick.com/do/search?query=" + search_terms + "&cat=web";
+				chrome.browserAction.setBadgeText({text: "OK"});
+				return {
+					redirectUrl: ixquick_url
+				};
+			}
 		}
 	}, {
 		urls: [
-			"*://www.google.com/search?*",
-			"*://google.com/search?*",
-			"*://encrypted.google.com/search?*",
+			"http://*/search?*",
+			"https://*/search?*",
 		],
 		types: ["main_frame"]
 	}, 
@@ -31,9 +32,11 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 chrome.browserAction.onClicked.addListener(function() {
 	if (enabled) {
 		enabled = false;
-		alert("g2i disabled");
+		chrome.browserAction.setIcon({path:"icons/g2i-disabled.png"});
+		chrome.browserAction.setTitle({ "title": "Enable Google2Ixquick"});
 	} else {
 		enabled = true;
-		alert("g2i enabled");
+		chrome.browserAction.setIcon({path:"icons/g2i-19.png"});
+		chrome.browserAction.setTitle({ "title": "Disable Google2Ixquick"});
 	}
 });
